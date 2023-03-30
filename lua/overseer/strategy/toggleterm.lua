@@ -25,6 +25,7 @@ function ToggleTermStrategy.new(opts)
     close_on_exit = false,
     open_on_start = true,
     hidden = false,
+    on_create = nil,
   })
   if opts.dir then
     vim.notify_once(
@@ -86,6 +87,10 @@ function ToggleTermStrategy:start(task)
     close_on_exit = self.opts.close_on_exit,
     hidden = self.opts.hidden,
     on_create = function(t)
+      if self.on_create then
+          self.on_create(t)
+      end
+
       if self.opts.use_shell then
         t:send(cmd)
         t:send("exit $?")
